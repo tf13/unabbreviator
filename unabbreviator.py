@@ -306,22 +306,20 @@ def prompt_for_expansion(word, context, terms, is_known_abbrev, current_word=0, 
     click.echo(f"  {highlighted}")
     click.echo()
 
-    # Common options for both cases
-    common_options = """  [i] Ignore (never prompt for this word)
-  [o] Once (expand once, don't add to abbreviations)
-  [v] Save and stop processing
-  [a] Abort (discard all changes)"""
-
     if is_known_abbrev:
         click.echo(click.style(f'Found abbreviation: ', fg='cyan') +
                    click.style(word, fg='yellow', bold=True))
-        click.echo(click.style('Options:', fg='cyan'))
 
+        # Expansion options - highlighted in green
+        click.echo(click.style('Expansions:', fg='green', bold=True))
         for i, term in enumerate(terms, 1):
-            click.echo(f"  [{i}] {term}")
-        click.echo(f"  [n] Add new expansion")
-        click.echo(f"  [s] Skip (keep as-is)")
-        click.echo(common_options)
+            click.echo(click.style(f"  [{i}] {term}", fg='green', bold=True))
+        click.echo(click.style(f"  [n] New expansion...", fg='green'))
+
+        # Action options - dimmer
+        click.echo(click.style('Actions:', dim=True))
+        click.echo(click.style("  [s] Skip    [i] Ignore    [o] Once...", dim=True))
+        click.echo(click.style("  [v] Save & stop    [a] Abort", dim=True))
 
         while True:
             choice = click.prompt('Choose', default='s').strip().lower()
@@ -354,10 +352,15 @@ def prompt_for_expansion(word, context, terms, is_known_abbrev, current_word=0, 
     else:
         click.echo(click.style(f'Unknown word: ', fg='cyan') +
                    click.style(word, fg='yellow', bold=True))
-        click.echo(click.style('Options:', fg='cyan'))
-        click.echo(f"  [e] Provide expansion (and add to abbreviations)")
-        click.echo(f"  [s] Skip (keep as-is)")
-        click.echo(common_options)
+
+        # Expansion options - highlighted in green
+        click.echo(click.style('Expansions:', fg='green', bold=True))
+        click.echo(click.style(f"  [e] Add expansion...", fg='green', bold=True))
+
+        # Action options - dimmer
+        click.echo(click.style('Actions:', dim=True))
+        click.echo(click.style("  [s] Skip    [i] Ignore    [o] Once...", dim=True))
+        click.echo(click.style("  [v] Save & stop    [a] Abort", dim=True))
 
         while True:
             choice = click.prompt('Choose', default='s').strip().lower()
